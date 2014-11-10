@@ -90,4 +90,39 @@ describe("Calculator", function(){
         //Asser3
         expect(result).toBe(expectedResult);
     });
+    it("Should be able to add arrays of numbers", function(){
+        //Arrange
+        var numbers1 = [10,20],
+            numbers2 = [30,40],
+            expectedResult = 100;
+
+        //Act
+        var result = add(numbers1, numbers2);
+
+        //Asser3
+        expect(result).toBe(expectedResult);
+    });
+    it("Should be able to add functions returing arrays of numbers", function(){
+        //Arrange
+        var f1 = function(){ return [10,20];},
+            f2 = function(){ return [30,40];},
+            expectedResult = 100;
+
+        //Act
+        var result = add(f1, f2);
+
+        //Asser3
+        expect(result).toBe(expectedResult);
+    });
+    it("Should be able to add nested array of numbers", function(){
+        //Arrange
+        var numbers = [10,[20,[30,[40]]]],
+            expectedResult = 100;
+
+        //Act
+        var result = add(numbers);
+
+        //Asser3
+        expect(result).toBe(expectedResult);
+    });
 });

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Manager</title>
+    <style>
+        .completed{
+            color : red;
+            text-decoration: line-through;
+            font-style: italic;
+        }
+    </style>
+    <script>
+    (function(){
+        window.addEventListener("DOMContentLoaded",init);
+        function init(){
+            document.getElementById("btnAddTask").addEventListener("click", onBtnAddTaskClick);
+            document.getElementById("btnRemoveCompleted").addEventListener('click', onBtnRemoveCompletedClick);
+            
+            addTaskEvents();
+        }
+        function addTaskEvents(){
+            var olTaskList = document.getElementById("olTaskList");
+            for(var i=olTaskList.children.length-1;i>=0;i--){
+                var taskItem = olTaskList.children[i];
+                taskItem.addEventListener("click",onTaskItemClick);
+            }
+        }
+        function onTaskItemClick(){
+            if (this.classList.contains("completed"))
+                this.classList.remove("completed");
+            else
+                this.classList.add("completed");
+        }
+        function onBtnAddTaskClick(){
+            var taskName = document.getElementById("txtTask").value;
+            //var newTask = "<li>" + taskName + "</li>";
+            var newTask = document.createElement("li");
+            newTask.innerHTML = taskName;
+            newTask.addEventListener("click",onTaskItemClick);
+            document.getElementById("olTaskList").appendChild(newTask);
+        }
+        
+        function onBtnRemoveCompletedClick(){
+            var olTaskList = document.getElementById("olTaskList");
+            for(var i=olTaskList.children.length-1;i>=0;i--){
+                var taskItem = olTaskList.children[i];
+                if (taskItem.classList.contains("completed"))
+                    taskItem.remove();
+            }
+        }
+    })();
+    </script>
+</head>
+<body>
+    <h1>Task Manager</h1>
+    <hr>
+    <label for="">Task :</label>
+    <input type="text" name="" id="txtTask">
+    <input type="button" value="Add Task" id="btnAddTask">
+    <input type="button" value="Remove Completed" id="btnRemoveCompleted">
+    <ol id="olTaskList">
+        <li>Task - 1</li>
+        <li class="completed">Task - 2</li>
+        <li>Task - 3</li>
+        <li>Another Task</li>
+    </ol>
+    <div id="divMessages"></div>
+</body>
+</html>

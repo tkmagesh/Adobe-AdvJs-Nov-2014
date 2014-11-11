@@ -9,11 +9,15 @@
             text-decoration: line-through;
             font-style: italic;
         }
-        #divMessages{
+        #divMessageContainer{
             position: absolute;
             right: 0px;
             bottom: 0px;
             margin: 5px;
+            padding : 5px;
+        }
+        .message{
+            margin : 5px;
             border: 2px solid black;
             border-radius: 4px;
             padding: 5px;
@@ -47,11 +51,16 @@
             displayMessage("Zero or more completed tasks are removed");
         }
         function displayMessage(msg){
-            $("#divMessages")
+            $("<div>")
+                .addClass("message")
                 .html(msg)
+                .hide()
+                .appendTo("#divMessageContainer")
                 .slideDown('fast')
                 .delay(3000)
-                .slideUp('fast');
+                .slideUp('fast', function(){
+                    $(this).remove();
+                });
         }
     })();
     </script>
@@ -69,6 +78,9 @@
         <li>Task - 3</li>
         <li>Another Task</li>
     </ol>
-    <div id="divMessages">[Here is the notification]</div>
+    <div id="divMessageContainer">
+        
+    </div>
+    
 </body>
 </html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AjaxDemo</title>
+    <script src="jquery-2.1.1.js"></script>
+    <script>
+    $(function(){
+        $("#btnLoadHtml").click(function(){
+            /*$.get("htmlFragment.html",function(res){
+                $(res).appendTo("#divContent");
+            }, "html");*/
+            $("#divContent").load("htmlFragment.html");
+        });
+        $("#btnLoadProducts").click(function(){
+            var $productsList = $("<ol>");
+            /*$.get("products.json", function(response){ 
+                $(response).each(function(index,product){
+                    $("<li>").html(product.name).appendTo($productsList);
+                });
+                $productsList.appendTo("#divContent");
+            }, "json")*/
+            $.getJSON("products.json", function(response){ 
+                $(response).each(function(index,product){
+                    $("<li>").html(product.name).appendTo($productsList);
+                });
+                $productsList.appendTo("#divContent");
+            });
+        });
+    });
+    </script>
+</head>
+<body>
+    <input type="button" value="Load HTML" id="btnLoadHtml">
+    <input type="button" value="Load Products" id="btnLoadProducts">
+    <div id="divContent"></div>
+</body>
+</html>

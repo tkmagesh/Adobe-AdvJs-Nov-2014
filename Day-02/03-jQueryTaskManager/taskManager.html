@@ -9,45 +9,49 @@
             text-decoration: line-through;
             font-style: italic;
         }
+        #divMessages{
+            position: absolute;
+            right: 0px;
+            bottom: 0px;
+            margin: 5px;
+            border: 2px solid black;
+            border-radius: 4px;
+            padding: 5px;
+            background-color: #eee;
+        }
     </style>
+    <script src="jquery-2.1.1.js"></script>
     <script>
     (function(){
-        window.addEventListener("DOMContentLoaded",init);
-        function init(){
-            document.getElementById("btnAddTask").addEventListener("click", onBtnAddTaskClick);
-            document.getElementById("btnRemoveCompleted").addEventListener('click', onBtnRemoveCompletedClick);
-            
-            addTaskEvents();
-        }
-        function addTaskEvents(){
-            var olTaskList = document.getElementById("olTaskList");
-            for(var i=olTaskList.children.length-1;i>=0;i--){
-                var taskItem = olTaskList.children[i];
-                taskItem.addEventListener("click",onTaskItemClick);
-            }
-        }
+        $(function(){
+            $("#btnAddTask").click(onBtnAddTaskClick);
+            $("#btnRemoveCompleted").click(onBtnRemoveCompletedClick);
+            $("#olTaskList").on("click", "li", onTaskItemClick);
+            $("#divMessages").hide();
+        });
         function onTaskItemClick(){
-            if (this.classList.contains("completed"))
-                this.classList.remove("completed");
-            else
-                this.classList.add("completed");
+            $(this).toggleClass("completed");
         }
         function onBtnAddTaskClick(){
-            var taskName = document.getElementById("txtTask").value;
-            //var newTask = "<li>" + taskName + "</li>";
-            var newTask = document.createElement("li");
-            newTask.innerHTML = taskName;
-            newTask.addEventListener("click",onTaskItemClick);
-            document.getElementById("olTaskList").appendChild(newTask);
+            $("<li></li>")
+                .html($("#txtTask").val())
+                .hide()
+                .appendTo("#olTaskList")
+                .slideDown('slow');
+            displayMessage("A new task is added");
         }
-        
         function onBtnRemoveCompletedClick(){
-            var olTaskList = document.getElementById("olTaskList");
-            for(var i=olTaskList.children.length-1;i>=0;i--){
-                var taskItem = olTaskList.children[i];
-                if (taskItem.classList.contains("completed"))
-                    taskItem.remove();
-            }
+            $("#olTaskList > li.completed").fadeOut('fast', function(){
+                $(this).remove();
+            });
+            displayMessage("Zero or more completed tasks are removed");
+        }
+        function displayMessage(msg){
+            $("#divMessages")
+                .html(msg)
+                .slideDown('fast')
+                .delay(3000)
+                .slideUp('fast');
         }
     })();
     </script>
@@ -65,6 +69,6 @@
         <li>Task - 3</li>
         <li>Another Task</li>
     </ol>
-    <div id="divMessages"></div>
+    <div id="divMessages">[Here is the notification]</div>
 </body>
 </html>

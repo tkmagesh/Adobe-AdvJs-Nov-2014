@@ -12,6 +12,11 @@ function Task(defaults){
         _data[attrName] = value;
         this.triggerChange(attrName);
     };
+    
+    this.toJSON = function(){
+        return JSON.parse(JSON.stringify(_data));
+    }
+    
     this.addChangeSubscriber = function(attrName, listener){
         _changeSubscribers[attrName] = _changeSubscribers[attrName] || [];
         _changeSubscribers[attrName].push(listener);

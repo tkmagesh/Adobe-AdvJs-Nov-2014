@@ -11,6 +11,7 @@
         }
     </style>
     <script src="jquery-2.1.1.js"></script>
+    <script src="handlebars-v2.0.0.js"></script>
     <script src="Task.js"></script>
     <script src="TaskCollection.js"></script>
     <script src="TaskItemView.js"></script>
@@ -19,6 +20,9 @@
         
     $(function(){
         window.taskCollection = new TaskCollection();
+        taskCollection.add("Watch a movie");
+        taskCollection.add("Take a break");
+        taskCollection.add("Practice JavaScript");
         window.taskAppView = new TaskAppView(taskCollection);
         taskAppView.initialize();
         taskAppView.render().$root.appendTo(document.body);
@@ -28,7 +32,11 @@
         <label for="">Task :</label>
         <input type="text" name="" id="txtTask">
         <input type="button" value="Add Task" id="btnAddTask">
-        <ol id="olTaskList"></ol>
+        <ol id="olTaskList">
+        {{#each list}}
+            <li taskid="{{id}}">{{name}}</li>
+          {{/each}}
+        </ol>
     </script>
 </head>
 <body>

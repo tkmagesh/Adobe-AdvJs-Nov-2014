@@ -12,7 +12,13 @@ function TaskCollection(){
     };
     this.getAll = function(){
         return _list.slice(0);
-    }
+    };
+    this.toJSON = function(){
+        var dataList = _list.map(function(item){
+            return item.toJSON();
+        });
+        return dataList;
+    } 
     this.addChangeSubscriber = function(attrName, listener){
         _changeSubscribers[attrName] = _changeSubscribers[attrName] || [];
         _changeSubscribers[attrName].push(listener);

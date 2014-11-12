@@ -22,7 +22,10 @@ function TaskAppView(taskCollection){
             }
             
             this.render = function(){
-                this.$root.append($("#taskAppTemplate").html());
+                var source = $("#taskAppTemplate").html();
+                var template = Handlebars.compile(source);
+                var data = {list : taskCollection.toJSON()};
+                this.$root.append(template(data));
                 return this;
             }
         }

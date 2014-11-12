@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Manager</title>
+    <style>
+        .completed {
+            color : red;
+            text-decoration: line-through;
+            font-style: italic;
+        }
+    </style>
+    <script src="jquery-2.1.1.js"></script>
+    <script src="Task.js"></script>
+    <script src="TaskCollection.js"></script>
+    <script src="TaskItemView.js"></script>
+    <script src="TaskAppView.js"></script>
+    <script>
+        
+    $(function(){
+        window.taskCollection = new TaskCollection();
+        window.taskAppView = new TaskAppView(taskCollection);
+        taskAppView.initialize();
+        taskAppView.render().$root.appendTo(document.body);
+    });
+    </script>
+    <script type="text/template" id="taskAppTemplate">
+        <label for="">Task :</label>
+        <input type="text" name="" id="txtTask">
+        <input type="button" value="Add Task" id="btnAddTask">
+        <ol id="olTaskList"></ol>
+    </script>
+</head>
+<body>
+    <h1>Task Manager</h1>
+    <hr>
+    
+</body>
+</html>

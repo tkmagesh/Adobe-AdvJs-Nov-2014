@@ -1,16 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app>
 <head>
     <meta charset="UTF-8">
     <title>Task Manager</title>
+    <script src="angular.js"></script>
+    <script>
+    function taskController($scope){
+        $scope.taskList = [];
+        $scope.addTask = function(newTask){
+            console.log(newTask + " - is added");
+            $scope.taskList.push(newTask);
+        };
+        $scope.removeCompleted = function(){
+            
+        }
+    }
+    </script>
 </head>
 <body>
     <h1>Task Manager</h1>
     <hr>
-    <label for="">Task :</label>
-    <input type="text" name="" id="">
-    <input type="button" value="Add Task" id="btnAddTask">
-    <input type="button" value="Remove Completed" id="btnRemoveCompleted">
-    <ul id="ulTaskList"></ul>
+    <div ng-controller="taskController">
+       <div>
+           <i>Task Count = [{{taskList.length}}]</i>
+       </div>
+        <label for="">Task :</label>
+        <input type="text" ng-model="newTask">
+        <input type="button" value="Add Task" id="btnAddTask" ng-click="addTask(newTask)">
+        <input type="button" value="Remove Completed" id="btnRemoveCompleted">
+        <ul id="ulTaskList">
+            <li ng-repeat="task in taskList">{{task}}</li>
+        </ul>    
+    </div>
+    
 </body>
 </html>

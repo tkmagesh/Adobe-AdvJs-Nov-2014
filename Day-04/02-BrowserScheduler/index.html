@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Browser Scheduler</title>
+    <script src="jquery-2.1.1.js"></script>
+    <script>
+    $(function(){
+        $("#btnDoWork").click(function(){
+            displayMessage("Work Started");
+            doWork();
+            displayMessage("Work Completed");
+        });
+        function displayMessage(msg){
+            $("#divMessages").html($("#divMessages").html() + "<br/>" + msg);
+        }
+        function doWork(){
+            for(var i=0;i<10000;i++)
+                for(var j=0;j<10000;j++)
+                    for(var k=0;k<100;k++){
+                    }
+        }
+    });
+    </script>
+</head>
+<body>
+    <input type="text" name="" id="">
+    <input type="button" value="Do Work" id="btnDoWork">
+    <div id="divMessages"></div>
+</body>
+</html>

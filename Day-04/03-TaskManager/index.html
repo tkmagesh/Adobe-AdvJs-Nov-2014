@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app>
+<html lang="en" ng-app="taskApp">
 <head>
     <meta charset="UTF-8">
     <title>Task Manager</title>
@@ -11,7 +11,21 @@
     </style>
     <script src="angular.js"></script>
     <script>
-        function getTaskStorage(){
+        angular.module("utils",[])
+            .filter("trimText",function(){
+                return function(data, limit){
+                    data = data || '';
+                    limit = limit || 20;
+                    return data.length > limit ? data.substr(0,limit) + "..." : data;
+                }
+            });
+        angular.module("taskApp",["utils"])
+            .service("notificationService",function(){
+                this.sendMessage = function(msg){
+                    console.log(msg + " - sent at " + new Date());
+                }
+            })
+            .factory("taskStorage", function (){
             var storage = window.localStorage;
             function getAllTasks(){
                 var result = [];
@@ -32,18 +46,20 @@
                 remove : removeTask,
                 getAll : getAllTasks
             };
-        }
-        function taskController($scope){
-            
-            var storage = getTaskStorage();
+        })
+            .controller("taskController", function($scope, taskStorage, notificationService){
+            console.dir(notificationService);
+            //var storage = getTaskStorage();
+            var storage = taskStorage;
             $scope.taskList = storage.getAll();
 
             $scope.addTask = function(newTask){
                 var task ={
                     id : new Date().getTime().toString(),
                     name : newTask,
-                    isCompleted : false
-                }
+                    isCompleted : false,
+                    created : new Date()
+                };
                 storage.save(task);
                 $scope.taskList.push(task);
             };
@@ -59,15 +75,19 @@
             };
             $scope.toggle = function(task){
                 task.isCompleted = !task.isCompleted;
-                saveTask(task);
+                storage.save(task);
             }
-        }
+        });
+        
     </script>
 </head>
 <body>
     <h1>Task Manager</h1>
     <hr>
     <div ng-controller="taskController">
+      <div>
+          <input type="range" min="5" max="20" ng-model="trimLength" ng-init="trimLength=10">
+      </div>
        <div>
            <i>Task Count = [{{taskList.length}}]</i>
        </div>
@@ -77,10 +97,10 @@
         <input type="button" value="Remove Completed" ng-click="removeCompleted()">
         <ul id="ulTaskList">
             <li 
-                ng-repeat="task in taskList" 
+                ng-repeat="task in taskList track by $index" 
                 ng-click="toggle(task)"
                 ng-class="{completed : task.isCompleted}"
-            >{{task}}</li>
+            >{{task.name | trimText:trimLength}}  <i>[{{task.created | date:'dd-MMM-yyyy'}}]</i> </li>
         </ul>    
     </div>
     

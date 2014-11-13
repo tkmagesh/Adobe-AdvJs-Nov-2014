@@ -3,18 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <title>Task Manager</title>
+    <style>
+    .completed {
+        color : red;
+        text-decoration: line-through;
+    }
+    </style>
     <script src="angular.js"></script>
     <script>
-    function taskController($scope){
-        $scope.taskList = [];
-        $scope.addTask = function(newTask){
-            console.log(newTask + " - is added");
-            $scope.taskList.push(newTask);
-        };
-        $scope.removeCompleted = function(){
-            
+        function getTaskStorage(){
+            var storage = window.localStorage;
+            function getAllTasks(){
+                var result = [];
+                for(var i=0;i<storage.length;i++){
+                    var task = window.JSON.parse(storage.getItem(storage.key(i)));
+                    result.push(task);                             
+                }
+                return result;
+            }
+            function saveTask(task){
+                storage.setItem(task.id, window.JSON.stringify(task));
+            }
+            function removeTask(task){
+                storage.removeItem(task.id);
+            }
+            return {
+                save : saveTask,
+                remove : removeTask,
+                getAll : getAllTasks
+            };
         }
-    }
+        function taskController($scope){
+            
+            var storage = getTaskStorage();
+            $scope.taskList = storage.getAll();
+
+            $scope.addTask = function(newTask){
+                var task ={
+                    id : new Date().getTime().toString(),
+                    name : newTask,
+                    isCompleted : false
+                }
+                storage.save(task);
+                $scope.taskList.push(task);
+            };
+
+            $scope.removeCompleted = function(){
+                $scope.taskList.forEach(function(t){
+                    if (t.isCompleted)
+                        storage.remove(t);
+                });
+                $scope.taskList = $scope.taskList.filter(function(t){
+                    return !t.isCompleted;
+                });
+            };
+            $scope.toggle = function(task){
+                task.isCompleted = !task.isCompleted;
+                saveTask(task);
+            }
+        }
     </script>
 </head>
 <body>
@@ -27,9 +74,13 @@
         <label for="">Task :</label>
         <input type="text" ng-model="newTask">
         <input type="button" value="Add Task" id="btnAddTask" ng-click="addTask(newTask)">
-        <input type="button" value="Remove Completed" id="btnRemoveCompleted">
+        <input type="button" value="Remove Completed" ng-click="removeCompleted()">
         <ul id="ulTaskList">
-            <li ng-repeat="task in taskList">{{task}}</li>
+            <li 
+                ng-repeat="task in taskList" 
+                ng-click="toggle(task)"
+                ng-class="{completed : task.isCompleted}"
+            >{{task}}</li>
         </ul>    
     </div>
     
